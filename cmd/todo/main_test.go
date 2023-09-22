@@ -59,4 +59,18 @@ func TestTodoCLI(t *testing.T) {
 			t.Fatal(err)
 		}
 	})
+
+	t.Run("ListsTasks", func(t *testing.T) {
+		cmd := exec.Command(cmdPath)
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		expected := task + "\n"
+
+		if expected != string(out) {
+			t.Errorf("Expected %s, got %s instead\n", expected, string(out))
+		}
+	})
 }

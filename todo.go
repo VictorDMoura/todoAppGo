@@ -40,3 +40,14 @@ func (l *List) Complete(i int) error {
 
 	return nil
 }
+
+// Delete method deletes a ToDo item from the list
+func (l *List) Delete(i int) error {
+	ls := *l
+	if i <= 0 || i > len(ls) {
+		return fmt.Errorf("item %d does not exist", i)
+	}
+
+	*l = append(ls[:i-1], ls[i:]...)
+	return nil
+}

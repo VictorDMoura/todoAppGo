@@ -46,6 +46,15 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
+	case *task != "":
+		// Add the task
+		l.Add(*task)
+
+		// Save the new list
+		if err := l.Save(todoFileName); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit()
+		}
 		// Concatenate all provided arguments with a space and
 		// add to the list as an item
 	default:

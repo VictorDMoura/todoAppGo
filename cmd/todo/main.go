@@ -39,7 +39,7 @@ func main() {
 	// For no extra arguments, print the list
 	case *list:
 		// List current to do items
-		fmt.Println(l)
+		fmt.Print(l)
 	case *complete > 0:
 		// Complete the given item
 		if err := l.Complete(*complete); err != nil {

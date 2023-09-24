@@ -92,7 +92,7 @@ func (l *List) Get(filename string) error {
 func (l *List) String() string {
 	formatted := ""
 	for k, t := range *l {
-		prefix := " "
+		prefix := "  "
 		if t.Done {
 			prefix = "X "
 		}

@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"strings"
 	"todo"
 )
 
@@ -12,6 +11,14 @@ import (
 const todoFileName = ".todo.json"
 
 func main() {
+
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(),
+			"%s tool, Developde fot The Pragmatic Bookshelf\n", os.Args[0])
+		fmt.Fprintf(flag.CommandLine.Output(), "Copyright 2020\n")
+		fmt.Fprint(flag.CommandLine.Output(), "Usage information:\n")
+		flag.PrintDefaults()
+	}
 	// Parsing command line flags
 	task := flag.String("task", "", "Task to be included in the ToDo list")
 	list := flag.Bool("list", false, "List all tasks")
@@ -33,7 +40,9 @@ func main() {
 	case *list:
 		// List current to do items
 		for _, item := range *l {
-			fmt.Println(item.Task)
+			if !item.Done {
+				fmt.Println(item.Task)
+			}
 		}
 	case *complete > 0:
 		// Complete the given item
@@ -53,20 +62,13 @@ func main() {
 		// Save the new list
 		if err := l.Save(todoFileName); err != nil {
 			fmt.Fprintln(os.Stderr, err)
-			os.Exit()
+			os.Exit(1)
 		}
 		// Concatenate all provided arguments with a space and
 		// add to the list as an item
 	default:
-		// Concatenate all arguments with a space
-		item := strings.Join(os.Args[1:], " ")
-		// Add the task
-		l.Add(item)
-
-		// Save the new list
-		if err := l.Save(todoFileName); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(1)
-		}
+		// invalid flag provided
+		fmt.Fprintf(os.Stderr, "Invalid option")
+		os.Exit(1)
 	}
 }

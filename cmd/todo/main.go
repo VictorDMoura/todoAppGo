@@ -8,7 +8,7 @@ import (
 )
 
 // Hardcoding the file name
-const todoFileName = ".todo.json"
+var todoFileName = ".todo.json"
 
 func main() {
 
@@ -27,6 +27,11 @@ func main() {
 	flag.Parse()
 	// Define an items list
 	l := &todo.List{}
+
+	// Check if the user defined the ENV VAR for a custom file name
+	if os.Getenv("TODO_FILENAME") != "" {
+		todoFileName = os.Getenv("TODO_FILENAME")
+	}
 
 	// Use the Get method to read to do items from file
 	if err := l.Get(todoFileName); err != nil {

@@ -11,8 +11,7 @@ import (
 )
 
 var (
-	binName  = "todo"
-	fileName = ".todo.json"
+	binName = "todo"
 )
 
 func TestMain(m *testing.M) {
@@ -28,6 +27,10 @@ func TestMain(m *testing.M) {
 		fmt.Fprintf(os.Stderr, "Cannot build tool %s: %s", binName, err)
 		os.Exit(1)
 	}
+	if err := os.Setenv("TODO_FILENAME", ".test-todo.json"); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 
 	fmt.Println("Running tests....")
 
@@ -35,7 +38,7 @@ func TestMain(m *testing.M) {
 
 	fmt.Println("Cleaning up...")
 	os.Remove(binName)
-	os.Remove(fileName)
+	os.Remove(os.Getenv("TODO_FILENAME"))
 
 	os.Exit(result)
 
@@ -83,7 +86,7 @@ func TestTodoCLI(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		expected := fmt.Sprintf("  1: %s\n  2: %s\n", task, task2)
+		expected := fmt.Sprintf("1: %s\n2: %s\n", task, task2)
 
 		if expected != string(out) {
 			t.Errorf("Expected %s, got %s instead\n", expected, string(out))
@@ -106,7 +109,7 @@ func TestTodoCLI(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		expected := fmt.Sprintf("  1: %s\n", task2)
+		expected := fmt.Sprintf("1: %s\n", task2)
 
 		if expected != string(out) {
 			t.Errorf("Expected %s, got %s instead\n", expected, string(out))

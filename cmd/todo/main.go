@@ -84,7 +84,12 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-		l.Add(t)
+		tasks := strings.Split(t, "\n")
+		for _, task := range tasks {
+			if task != "" {
+				l.Add(task)
+			}
+		}
 
 		// Save the new list
 		if err := l.Save(todoFileName); err != nil {
@@ -115,5 +120,10 @@ func getTask(r io.Reader, args ...string) (string, error) {
 		return "", fmt.Errorf("task cannot be blank")
 	}
 
-	return s.Text(), nil
+	tasks := fmt.Sprintln(s.Text())
+	for s.Scan() {
+		tasks += fmt.Sprintln(s.Text())
+	}
+
+	return tasks, nil
 }

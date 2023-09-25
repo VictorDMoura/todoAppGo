@@ -24,10 +24,11 @@ func main() {
 	}
 	// Parsing command line flags
 	add := flag.Bool("add", false, "Add task to the ToDo list")
-	list := flag.Bool("list", false, "List all tasks")
+	listall := flag.Bool("listall", false, "List all tasks")
 	complete := flag.Int("complete", 0, "Item to be completed")
 	del := flag.Int("del", 0, "Item to be deleted")
 	verbose := flag.Bool("verbose", false, "List all task with time/date")
+	list := flag.Bool("list", false, "Show undone tasks")
 
 	flag.Parse()
 	// Define an items list
@@ -47,7 +48,7 @@ func main() {
 	// Decide what to do based on the number of arguments provided
 	switch {
 	// For no extra arguments, print the list
-	case *list:
+	case *listall:
 		// List current to do items
 		fmt.Print(l)
 	case *verbose:
@@ -63,6 +64,8 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
+	case *list:
+		fmt.Print(l.ShowUndone())
 	case *del > 0:
 		// Delete the given item
 		if err := l.Delete(*del); err != nil {

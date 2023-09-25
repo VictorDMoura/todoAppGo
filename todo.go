@@ -110,7 +110,21 @@ func (l *List) ShowVerbose() string {
 			prefix = "X "
 		}
 		// Adjusting the item number k to print numbers starting from 1 instead of 0
-		formatted += fmt.Sprintf("%s%d: %s - %s\n", prefix, k+1, t.Task, t.CreatedAt.Format(time.RFC822))
+		if !t.Done {
+			formatted += fmt.Sprintf("%s%d: %s - %s\n", prefix, k+1, t.Task, t.CreatedAt.Format(time.RFC822))
+		} else {
+			formatted += fmt.Sprintf("%s%d: %s - %s\n", prefix, k+1, t.Task, t.CompletedAT.Format(time.RFC822))
+		}
+	}
+	return formatted
+}
+
+func (l *List) ShowUndone() string {
+	formatted := ""
+	for k, t := range *l {
+		if !t.Done {
+			formatted += fmt.Sprintf("%d: %s\n", k+1, t.Task)
+		}
 	}
 	return formatted
 }

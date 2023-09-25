@@ -27,6 +27,7 @@ func main() {
 	list := flag.Bool("list", false, "List all tasks")
 	complete := flag.Int("complete", 0, "Item to be completed")
 	del := flag.Int("del", 0, "Item to be deleted")
+	verbose := flag.Bool("verbose", false, "List all task with time/date")
 
 	flag.Parse()
 	// Define an items list
@@ -49,6 +50,8 @@ func main() {
 	case *list:
 		// List current to do items
 		fmt.Print(l)
+	case *verbose:
+		fmt.Print(l.ShowVerbose())
 	case *complete > 0:
 		// Complete the given item
 		if err := l.Complete(*complete); err != nil {
